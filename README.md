@@ -11,6 +11,7 @@ short for daemontools.js (THESE TWO PROJECTS ARE NOT EQUAL)
 - tested only in arch
 
 ## Requirements:
+- busybox (HARD REQUIREMENT FOR shutdown)
 - inotifywait from inotify-tools (HARD REQUIREMENT FOR shutdown_waiter)
 - dbus (by dbus-daemon, not dbus-broker)
 - udev
