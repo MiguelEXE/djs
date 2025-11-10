@@ -1,0 +1,11 @@
+#!/bin/bash
+set -euo pipefail
+
+dbus-uuidgen --ensure=/etc/machine-id
+
+# uncomment to generate a new UUID in each boot/restart of dbus (NOT RECOMMENDED)
+#dbus-uuidgen
+
+install -m755 -g 81 -o 81 -d /run/dbus
+
+exec dbus-daemon --system --nofork --nopidfile

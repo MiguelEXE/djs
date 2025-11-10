@@ -1,0 +1,21 @@
+#!/bin/bash
+set -euo pipefail
+
+# sync partitions
+sync
+
+# umount partitions
+if mountpoint /boot; then
+	umount /boot
+fi
+
+swapoff -a
+
+mount -o remount,ro /
+
+if [ $1 == "reboot" ]; then
+	exec busybox reboot -f
+elif [ $1 == "poweroff" ]; then
+	exec busybox poweroff -f
+fi
+exec busybox halt -f

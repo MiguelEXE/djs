@@ -1,0 +1,46 @@
+#!/bin/bash
+set -euo pipefail
+
+SERVICE_TO_PROCESS_TIMEOUT=5
+TIMEOUT=2
+
+killall5(){
+	PROCESSESS="$(ps aux | awk {'print $2'} | sed -z 's/\n/ /g' | cut -d " " -f 2-)"
+	for s in $PROCESSESS; do
+		if [ $s == "1" ]; then
+			continue
+		elif [ $s == $$ ]; then
+			continue
+		elif [ $s == $$PID ]; then
+			continue
+		elif [ "$(ps -o ppid= -p $s | xargs)" == "1" ]; then
+			continue
+		fi
+		# if it fails, ignore
+		kill $@ $s || :
+	done
+}
+
+cd /etc/djs/services
+SERVICES="$(find . -mindepth 1 -maxdepth 1 -type d | sed 's/^..//g' | sed -z 's/\n/ /g')"
+
+echo STOPPING ALL SERVICES!
+
+for s in $SERVICES; do
+	node /etc/djs/daemontools.js/svc.js -dt $s
+done
+
+sleep $SERVICE_TO_PROCESS_TIMEOUT
+
+echo STOPPING ALL PROCESSESS!
+
+killall5 "-15"
+
+sleep $TIMEOUT
+
+echo DIE!
+
+for s in $SERVICES; do
+	node /etc/djs/daemontools.js/svc.js -dk $s
+done
+killall5 "-9"

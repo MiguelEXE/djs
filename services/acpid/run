@@ -1,0 +1,6 @@
+#!/bin/bash
+set -euo pipefail
+
+node /etc/djs/daemontools.js/svwait.js -u udevadm-oneshot
+
+exec acpid --foreground --netlink

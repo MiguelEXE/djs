@@ -1,0 +1,11 @@
+#!/bin/bash
+set -euo pipefail
+
+node /etc/djs/daemontools.js/svwait.js -u dbus
+node /etc/djs/daemontools.js/svwait.js -u udevadm-oneshot
+
+CURRENT_TTY="$(pwd | grep '....$')"
+
+echo warning: does not support other ttys by now
+
+exec /sbin/agetty --noreset --noclear --issue-file=/etc/issue:/etc/issue.d:/run/issue.d:/usr/lib/issue.d - ${TERM}

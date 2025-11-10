@@ -1,0 +1,11 @@
+#!/bin/bash
+set -euo pipefail
+
+node /etc/djs/daemontools.js/svwait.js -u udevd
+
+/bin/udevadm trigger --action=add --type=subsystems
+/bin/udevadm trigger --action=add --type=devices
+/bin/udevadm settle
+
+# required so that supervise wont restart this
+sleep infinity

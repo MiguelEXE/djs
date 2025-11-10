@@ -1,0 +1,18 @@
+#!/bin/bash
+set -euo pipefail
+
+if [ ! -f "/etc/djs/shutdown_target" ]; then
+	touch /etc/djs/shutdown_target
+else
+	echo "WARNING: system was not properly shutdown" >&2
+	printf '' > /etc/djs/shutdown_target
+fi
+
+inotifywait -e close_write --quiet /etc/djs/shutdown_target
+
+SHUTDOWN_TYPE=$(cat /etc/djs/shutdown_target)
+
+rm /etc/djs/shutdown_target
+
+. /etc/djs/shutdown.rc $SHUTDOWN_TYPE
+exec /etc/djs/shutdown $SHUTDOWN_TYPE

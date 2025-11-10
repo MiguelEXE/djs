@@ -1,0 +1,3 @@
+[submodule "daemontools.js-repo"]
+	path = daemontools.js-repo
+	url = https://github.com/MiguelEXE/daemontools.js

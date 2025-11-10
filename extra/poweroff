@@ -1,0 +1,10 @@
+#!/bin/bash
+set -euo pipefail
+
+if [ ! -f "/etc/djs/shutdown_target" ]; then
+	echo "/etc/djs/shutdown_target does not exist. is your system booted by djs?" >&2
+	exit 1
+fi
+
+echo "Powering down now!"
+printf 'poweroff' > /etc/djs/shutdown_target
